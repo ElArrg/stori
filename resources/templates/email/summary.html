@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Summary</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+            background-color: #f7f7f7;
+        }
+        .content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #ffffff;
+            border-top: 3px solid #22bfa0;
+        }
+        /* Header styles */
+        .header {
+            background-color: #22bfa0;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+        }
+        .header img.logo {
+            height: 50px;
+        }
+        /* Summary table styles */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .summary-table th,
+        .summary-table td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #dddddd;
+        }
+        .summary-table th {
+            background-color: #22bfa0;
+            color: #ffffff;
+        }
+        .summary-table td {
+            background-color: #f9f9f9;
+        }
+        /* Footer styles */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <img src="https://media.giphy.com/media/VXWN05HTttWxoCnXdP/source.gif" alt="Company Logo" class="logo"/>
+</div>
+<div class="content">
+    <p>Hi {{.RecipientName}},</p>
+    <p>Here's your account summary:</p>
+    <table class="summary-table">
+        <tr><th>Total Balance</th><td>{{.TotalBalance}}</td></tr>
+        <tr><th>Average Debit Amount</th><td>{{.AverageDebit}}</td></tr>
+        <tr><th>Average Credit Amount</th><td>{{.AverageCredit}}</td></tr>
+        {{range .TransactionsByMonth}}
+        <tr><th>Number of transactions in {{.Month}}</th><td>{{.Count}}</td></tr>
+        {{end}}
+    </table>
+    <p>Best regards,</p>
+    <p>Stori</p>
+</div>
+<div class="footer">
+    <p>Please do not reply to this email as it is automatically generated.</p>
+</div>
+</body>
+</html>
