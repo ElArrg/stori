@@ -1,0 +1,17 @@
+---
+postgres:
+  dsn:
+  query_debug: true
+
+sendgrid:
+  key:
+  host: "https://api.sendgrid.com"
+  sandbox_mode: false
+  sender-name: "ElArrg Notifications"
+  sender-email:
+
+transactions:
+  source-type: disk
+  source-format: csv
+  source-path: "resources/transactions/1_txns.csv"
+...
