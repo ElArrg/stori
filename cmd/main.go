@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/elarrg/stori/ledger/configs"
 	"github.com/elarrg/stori/ledger/internal/adapters/clients/sendgrid"
 	"github.com/elarrg/stori/ledger/internal/repository/postgres"
 	"github.com/elarrg/stori/ledger/internal/service/notifications"
@@ -17,30 +18,16 @@ import (
 )
 
 func main() {
-	config := struct {
-		SengridClient sendgrid.ClientConfigs
-		PostgresDB    db.PostgresConfig
-	}{
-		SengridClient: sendgrid.ClientConfigs{
-			SenderEmail: "notifications@elarrg.com",
-			SenderName:  "ElArrg Notifications",
-			Key:         "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",
-			Host:        "https://api.sendgrid.com",
-			SandboxMode: false,
-		},
-		PostgresDB: db.PostgresConfig{
-			DSN:        "postgresql://postgres:pass-ledger@localhost:5432/ledger",
-			QueryDebug: true,
-		},
+	conf, err := configs.Load()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
 	defer cancel()
 
-	filepath := "/Users/elias/Development/interview/stori/ledger/resources/transactions/1_txns.csv"
-
 	// dependency injection
-	postgresDB, err := db.NewPostgresDB(&config.PostgresDB)
+	postgresDB, err := db.NewPostgresDB(&conf.PostgresDB)
 	if err != nil {
 		log.Fatalf("couldn't connect to DB: %v", err)
 	}
@@ -51,7 +38,7 @@ func main() {
 	notifRepo := postgres.NewNotificationsRepository(postgresDB.DB)
 
 	// clients
-	sendgridClient := sendgrid.NewDefaultClient(&config.SengridClient)
+	sendgridClient := sendgrid.NewDefaultClient(&conf.Sendgrid)
 
 	diskSrcOp := sources.NewDiskOpener()
 	csvParser := parser.NewCSVParser([]string{})
@@ -65,7 +52,7 @@ func main() {
 	transSvc := transactions.NewDefaultService(transRepo, csvParser, notifSvc)
 
 	// Start the process
-	file, err := diskSrcOp.OpenFromSource(filepath)
+	file, err := diskSrcOp.OpenFromSource(conf.Transactions.SourcePath)
 	if err != nil {
 		log.Fatalf("couldn't open file from source")
 	}

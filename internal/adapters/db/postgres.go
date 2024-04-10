@@ -12,8 +12,8 @@ import (
 )
 
 type PostgresConfig struct {
-	DSN        string
-	QueryDebug bool
+	DSN        string `koanf:"dsn"`
+	QueryDebug bool   `koanf:"query_debug"`
 }
 
 type PostgresDB struct {

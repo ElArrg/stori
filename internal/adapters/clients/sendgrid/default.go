@@ -8,11 +8,11 @@ import (
 )
 
 type ClientConfigs struct {
-	SenderEmail string `koanf:""`
-	SenderName  string `koanf:""`
-	Key         string `koanf:""`
-	Host        string `koanf:""`
-	SandboxMode bool   `koanf:""`
+	SenderEmail string `koanf:"sender-email"`
+	SenderName  string `koanf:"sender-name"`
+	Key         string `koanf:"key"`
+	Host        string `koanf:"host"`
+	SandboxMode bool   `koanf:"sandbox_mode"`
 }
 
 type DefaultClient struct {
